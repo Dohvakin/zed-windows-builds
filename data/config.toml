@@ -1,0 +1,5 @@
+# this file defines the extra rustflags to build Zed with
+# it is IMPORTANT you DO NOT set a rustflags env var, as this overrides
+# Zed's official config.toml, which can cause build issues
+[target.'cfg(all())']
+rustflags = ["-C", "target-cpu=alderlake"]

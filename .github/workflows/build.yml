@@ -31,26 +31,46 @@ jobs:
       - run: Set-MpPreference -DisableRealtimeMonitoring $true
         shell: powershell
 
-      - name: Checkout repository
+      - name: Checkout Zed repo
         uses: actions/checkout@v4
         with:
           repository: zed-industries/zed
           ref: main
           fetch-depth: 0
+          path: '_zed'
+
+      - name: Checkout local repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          path: '_local'
+
+      - name: Patch config.toml
+        run: |
+          New-Item -ItemType Directory -Path .cargo
+          Copy-Item -Path _local/data/config.toml -Destination .cargo
 
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "_zed -> target"
 
       - name: Cache latest commit hash
         if: ${{ github.event_name == 'schedule' || inputs.schedule }}
         uses: actions/cache@v4
         with:
-            path: .last_commit_hash
+            path: _zed/.last_commit_hash
             key: latest-commit-hash-${{ github.run_number }}
             restore-keys: 'latest-commit-hash'
 
+      - name: Build release
+        working-directory: _zed
+        run: |
+          cargo build --release --color always
+
       - name: Generate changelog
         if: ${{ github.event_name == 'schedule' || inputs.schedule }}
+        working-directory: _zed
         run: |
           if (Test-Path .last_commit_hash) {
             $LHASH = Get-Content -Path .last_commit_hash -Raw
@@ -71,22 +91,16 @@ jobs:
           echo "| - | - |" >> changelog.txt
           echo $(git log $REV --reverse --date=relative --abbrev=7 --pretty=format:"| [%h](https://github.com/zed-industries/zed/commit/%H) | %s |") >> changelog.txt
 
-      - name: Build release
-        env:
-          RUSTFLAGS: -C target-cpu=alderlake
-        run: |
-          cargo build --release --color always
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: zed-release
-          path: target/release/zed.exe
+          path: _zed/target/release/zed.exe
 
       - name: Archive build
         if: ${{ github.event_name == 'schedule' || inputs.schedule }}
         run: |
-          Compress-Archive -CompressionLevel Optimal -Path target/release/zed.exe -DestinationPath zed-windows.zip
+          Compress-Archive -CompressionLevel Optimal -Path _zed/target/release/zed.exe -DestinationPath zed-windows.zip
 
       - name: Get the current date
         if: ${{ github.event_name == 'schedule' || inputs.schedule }}
@@ -101,7 +115,7 @@ jobs:
         with:
           name: ${{ env.DATE }}
           tag_name: ${{ env.DATE }}
-          body_path: changelog.txt
+          body_path: _zed/changelog.txt
           draft: false
           make_latest: true
           files: zed-windows.zip
