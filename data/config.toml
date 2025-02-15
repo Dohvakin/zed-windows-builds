@@ -2,4 +2,11 @@
 # it is IMPORTANT you DO NOT set a rustflags env var, as this overrides
 # Zed's official config.toml, which can cause build issues
 [target.'cfg(target_os = "windows")']
-rustflags = ["-C", "target-cpu=znver3"]
+rustflags = [
+    "--cfg",
+    "windows_slim_errors",        # This cfg will reduce the size of `windows::core::Error` from 16 bytes to 4 bytes
+    "-C",
+    "target-feature=+crt-static", # This fixes the linking issue when compiling livekit on Windows
+    "--cfg",
+    "gles"
+]
