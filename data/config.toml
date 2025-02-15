@@ -2,4 +2,4 @@
 # it is IMPORTANT you DO NOT set a rustflags env var, as this overrides
 # Zed's official config.toml, which can cause build issues
 [target.'cfg(target_os = "windows")']
-rustflags = ["-C", "target-cpu=znver3", "target-feature=+crt-static"]
+rustflags = ["-C", "target-cpu=znver3"]
