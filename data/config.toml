@@ -2,7 +2,7 @@
 # it is IMPORTANT you DO NOT set a rustflags env var, as this overrides
 # Zed's official config.toml, which can cause build issues
 [target.'cfg(all())']
-rustflags = ["-C", "target-cpu=alderlake"]
+rustflags = ["-C", "target-cpu=znver3"]
 
 [profile.release]
 debug = false
