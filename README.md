@@ -13,7 +13,7 @@ At the top you'll see something like
 Available CPUs for this target:
     native                  - Select the CPU of the current host (currently alderlake).
 ```
-In my case it was `alderlake`. In [config.toml](https://github.com/Dohvakin/zed-windows-builds/blob/main/data/config.toml), change the `znver3` part in the `target-cpu=znver3` to your specific CPU.
+In my case it was `znver3`. In [config.toml](https://github.com/Dohvakin/zed-windows-builds/blob/main/data/config.toml), change the `znver3` part in the `target-cpu=znver3` to your specific CPU.
 
 ## App
 
