@@ -2,7 +2,7 @@
 
 ## Warning
 
-This is a personal repo built for my CPU with `-C target-cpu=alderlake`. You should not use this repo or its builds. Use the parent repo as it is generalized for any CPU.
+This is a personal repo built for my CPU with `-C target-cpu=znver3`. You should not use this repo or its builds. Use the parent repo as it is generalized for any CPU.
 
 But if you're interested in getting nightly builds customized to your specific CPU, then fork this repo and run this cmd in your terminal:
 
@@ -13,7 +13,7 @@ At the top you'll see something like
 Available CPUs for this target:
     native                  - Select the CPU of the current host (currently alderlake).
 ```
-In my case it was `alderlake`. In [config.toml](https://github.com/MolotovCherry/zed-windows-builds/blob/main/data/config.toml), change the `alderlake` part in the `target-cpu=alderlake` to your specific CPU.
+In my case it was `alderlake`. In [config.toml](https://github.com/Dohvakin/zed-windows-builds/blob/main/data/config.toml), change the `znver3` part in the `target-cpu=znver3` to your specific CPU.
 
 ## App
 
