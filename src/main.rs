@@ -12,7 +12,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let octocrab = octocrab::instance();
 
     let latest = octocrab
-        .repos("MolotovCherry", "zed-windows-builds")
+        .repos("Dohvakin", "zed-windows-builds")
         .releases()
         .get_latest()
         .await?;
